@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_firebase_ui_template/domain/user_model.dart';
+import 'package:todo_firebase_ui_template/infrastructure/todo_db.dart';
 import 'package:todo_firebase_ui_template/presentation/panel/todo_home.dart';
 import 'package:todo_firebase_ui_template/presentation/registration/signup_screen.dart';
 
@@ -81,10 +83,37 @@ class _ScreenLoginState extends State<ScreenLogin> {
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: ElevatedButton(
-                          onPressed: () {
-                            //  if (_formKey.currentState!.validate()) {}
-                            Navigator.of(context).push(MaterialPageRoute(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              UserModel user = UserModel(
+                                  userId: '1',
+                                  userName: '1',
+                                  userEmail: emailController.text,
+                                  userPassword: passwordController.text,
+                                  userMobile: '1',
+                                  userAddress: '1');
+                                  if(await checkLogin(user) ){
+                                    Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const ScreenTodoHome()));
+                                  }
+                                  else{
+                                    final snackBar = SnackBar(
+                                  content: const Text('Inalid Credentials.'),
+                                  action: SnackBarAction(
+                                    label: 'Ok',
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ScreenLogin()));
+                                    },
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                  }
+                            }
+                            
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purple, // Purple background

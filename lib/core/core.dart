@@ -1,0 +1,2 @@
+String globalUserName = '';
+String globalUserId = '';

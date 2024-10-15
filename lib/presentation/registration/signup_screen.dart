@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_firebase_ui_template/domain/user_model.dart';
+import 'package:todo_firebase_ui_template/infrastructure/todo_db.dart';
+import 'package:todo_firebase_ui_template/presentation/login.dart';
 
 class ScreenSignup extends StatefulWidget {
   const ScreenSignup({super.key});
@@ -147,8 +150,28 @@ class _ScreenSignupState extends State<ScreenSignup> {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      UserModel user = UserModel(
+                          userId: '1',
+                          userName: nameController.text,
+                          userEmail: emailController.text,
+                          userPassword: passwordController.text,
+                          userMobile: mobileController.text,
+                          userAddress: addressController.text);
+                      await registerUser(user);
+                      final snackBar = SnackBar(
+                        content: const Text('Registration successfull.'),
+                        action: SnackBarAction(
+                          label: 'Ok',
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const ScreenLogin()));
+                          },
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple, // Purple background

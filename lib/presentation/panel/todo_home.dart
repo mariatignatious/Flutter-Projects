@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_firebase_ui_template/core/core.dart';
 import 'package:todo_firebase_ui_template/domain/todo_model.dart';
+import 'package:todo_firebase_ui_template/infrastructure/todo_db.dart';
 
 class ScreenTodoHome extends StatefulWidget {
   const ScreenTodoHome({super.key});
@@ -23,15 +25,17 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final taskController = TextEditingController();
   final taskSearchController = TextEditingController();
+  String userName = '';
   bool editFlag = false;
   int index = 100;
   String editId = '';
   @override
   Widget build(BuildContext context) {
+    loadUserName();
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Welcome <Display User Name>',
+        title: Text(
+          'Welcome $userName',
           style: TextStyle(fontSize: 23, color: Colors.white),
         ),
         backgroundColor: Colors.purple,
@@ -224,5 +228,12 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
         ),
       ),
     );
+  }
+
+  Future<void> loadUserName() async {
+    globalUserName = await getUserName(globalUserId);
+    setState(() {
+      userName = globalUserName;
+    });
   }
 }
