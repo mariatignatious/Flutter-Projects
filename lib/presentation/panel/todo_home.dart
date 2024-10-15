@@ -115,6 +115,12 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 if (editFlag == false) {
+                                  TodoModel t = TodoModel(
+                                      id: 'id',
+                                      todoName: taskController.text,
+                                      userId: 'userId',
+                                      todoStatus: '0');
+                                  addTask(t);
                                   /*index = index + 1;
                                   TodoModel t = TodoModel(
                                       id: (index).toString(),
@@ -208,10 +214,11 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
                                 icon: const Icon(Icons.edit)),
                             IconButton(
                                 onPressed: () {
-                                  setState(() {
+                                  deleteTask(todoModelList[index].id);
+                                  /*setState(() {
                                     todoModelList.removeWhere((item) =>
                                         item.id == todoModelList[index].id);
-                                  });
+                                  }); */
                                 },
                                 icon: const Icon(Icons.delete))
                           ],

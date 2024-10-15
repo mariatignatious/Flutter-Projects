@@ -65,6 +65,7 @@ Future<String> getUserName(String userId) async {
 }
 
 Future<void> loadDatabase() async {
+  //print(globalUserId);
   final firebaseFirestore = FirebaseFirestore.instance
       .collection('tasks')
       .where('userId', isEqualTo: globalUserId)
@@ -74,10 +75,31 @@ Future<void> loadDatabase() async {
     for (var doc in querySnapshot.docs) {
       TodoModel t = TodoModel(
           id: doc.id,
-          todoName: doc['todoName'],
+          todoName: doc['name'],
           userId: doc['userId'],
-          todoStatus: doc['todoStatus']);
+          todoStatus: doc['status']);
       globalTodoList.add(t);
+      print(globalTodoList);
     }
+  });
+}
+
+Future<void> addTask(TodoModel t) async {
+  await FirebaseFirestore.instance.collection('tasks').add({
+    'name': t.todoName,
+    'status': t.todoStatus,
+    'userId': globalUserId
+  }).then((_) async {
+    await loadDatabase();
+  });
+}
+
+Future<void> deleteTask(String taskId) async {
+  await FirebaseFirestore.instance
+      .collection('tasks')
+      .doc(taskId)
+      .delete()
+      .then((_) {
+    loadDatabase();
   });
 }
