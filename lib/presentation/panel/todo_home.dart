@@ -12,7 +12,7 @@ class ScreenTodoHome extends StatefulWidget {
 
 class _ScreenTodoHomeState extends State<ScreenTodoHome> {
   List<TodoModel> todoModelList = [
-    TodoModel(id: '1', todoName: 'Hospital Visit', todoStatus: '0'),
+    /*TodoModel(id: '1', todoName: 'Hospital Visit', todoStatus: '0'),
     TodoModel(id: '2', todoName: 'Car Wash', todoStatus: '0'),
     TodoModel(id: '3', todoName: 'Call Technitian', todoStatus: '1'),
     TodoModel(id: '4', todoName: 'School Fees', todoStatus: '0'),
@@ -20,7 +20,7 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
     TodoModel(id: '6', todoName: 'Family Function', todoStatus: '1'),
     TodoModel(id: '7', todoName: 'Vaccine', todoStatus: '0'),
     TodoModel(id: '8', todoName: 'Time Table update', todoStatus: '1'),
-    TodoModel(id: '8', todoName: 'Time Table update', todoStatus: '1'),
+    TodoModel(id: '8', todoName: 'Time Table update', todoStatus: '1'), */
   ];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final taskController = TextEditingController();
@@ -115,14 +115,14 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 if (editFlag == false) {
-                                  index = index + 1;
+                                  /*index = index + 1;
                                   TodoModel t = TodoModel(
                                       id: (index).toString(),
                                       todoName: taskController.text,
                                       todoStatus: '0');
                                   setState(() {
                                     todoModelList.add(t);
-                                  });
+                                  }); */
                                   taskController.text = '';
                                 } else {
                                   setState(() {
@@ -164,12 +164,12 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       onTap: () {
-                        setState(() {
+                        /*setState(() {
                           todoModelList[index].todoStatus =
                               todoModelList[index].todoStatus == '0'
                                   ? '1'
                                   : '0';
-                        });
+                        }); */
                       },
                       leading: Text(
                         (index + 1).toString(),
@@ -232,8 +232,10 @@ class _ScreenTodoHomeState extends State<ScreenTodoHome> {
 
   Future<void> loadUserName() async {
     globalUserName = await getUserName(globalUserId);
+    await loadDatabase();
     setState(() {
       userName = globalUserName;
+      todoModelList = globalTodoList;
     });
   }
 }

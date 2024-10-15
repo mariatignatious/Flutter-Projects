@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_firebase_ui_template/core/core.dart';
+import 'package:todo_firebase_ui_template/domain/todo_model.dart';
 import 'package:todo_firebase_ui_template/domain/user_model.dart';
 
 Future<void> registerUser(UserModel user) async {
@@ -52,11 +53,31 @@ Future<String> getUserName(String userId) async {
         .doc(userId)
         .get()
         .then((documentSnapshot) {
-      if (documentSnapshot.exists) { //checking if there is anything in documentSnapshot
-        final userData = documentSnapshot.data(); //map from documentSnapshot stored ot userData
+      if (documentSnapshot.exists) {
+        //checking if there is anything in documentSnapshot
+        final userData = documentSnapshot
+            .data(); //map from documentSnapshot stored ot userData
         userName = userData!['name'];
       }
     });
   }
   return Future.value(userName);
+}
+
+Future<void> loadDatabase() async {
+  final firebaseFirestore = FirebaseFirestore.instance
+      .collection('tasks')
+      .where('userId', isEqualTo: globalUserId)
+      .get()
+      .then((querySnapshot) {
+    globalTodoList.clear();
+    for (var doc in querySnapshot.docs) {
+      TodoModel t = TodoModel(
+          id: doc.id,
+          todoName: doc['todoName'],
+          userId: doc['userId'],
+          todoStatus: doc['todoStatus']);
+      globalTodoList.add(t);
+    }
+  });
 }
